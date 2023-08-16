@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./todo-list.css">
+    <title>Document</title>
+    <style>
+        #Paste{
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="header">
+            <h3>TO-DO List</h3>
+        </div>
+        <hr>
+        <div class="list">
+            <ul id="taskList">
+                <!-- <li class="cmpltd">tsadfa-spin</li> -->
+            </ul>
+        </div>
+        <div class="add">
+            <input type="text" id="task"  placeholder="task">
+            <button onclick="addTask()" id="addBtn">add task</button>
+        </div>
+        
+    </main>
+    <div class="allClearBtn"> 
+        <button onclick="clearData()">clearALL</button>
+    </div>
+    <script>
+        const task = document.getElementById("task");
+        const taskList = document.getElementById("taskList");
+
+        var addTask = ()=>{    
+            if(task.value === ""){
+                alert("Please enter some task to add");
+            }else{
+                let presentTask = document.createElement('li');
+                // var presentTask = taskList.appendChild(document.createElement('li'));
+                // presentTask.appendChild(document.createTextNode(task));
+                presentTask.innerHTML = task.value;
+                taskList.appendChild(presentTask);
+                let dlt = document.createElement('span');
+                dlt.innerHTML = '\u00d7';
+                presentTask.appendChild(dlt);
+            } 
+            task.value = "";
+            saveData();          
+        }
+        
+        taskList.addEventListener("click",(e)=>{
+            if(e.target.tagName === "LI"){
+                e.target.classList.toggle("cmpltd");
+            }
+            else if (e.target.tagName === "SPAN") {
+                    e.target.parentElement.remove();
+               
+            } 
+            saveData();
+        });
+
+        task.addEventListener("keypress",(e)=>{
+            if(e.key === "Enter"){
+                // e.preventDefault();
+                document.getElementById("addBtn").click();
+            }
+        })
+
+        function saveData(){
+            localStorage.setItem("data",taskList.innerHTML);
+        }
+        function showTask(){
+            taskList.innerHTML = localStorage.getItem("data");
+        }
+        showTask();
+
+        function clearData(){
+            taskList.innerHTML = "";
+            localStorage.setItem("data",taskList.innerHTML);
+        }
+    </script>
+</body>
+</html>
